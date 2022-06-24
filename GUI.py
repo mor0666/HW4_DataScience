@@ -134,10 +134,10 @@ class GUI:
                 self.runs = int(num_input)  # convert
                 if self.runs <= 0 or self.runs > 300:
                     self.cluster_button["state"] = "disabled"
-                    messagebox.showinfo(title="K Means Clustering",message="Error, enter a number between 10 and 300")
+                    messagebox.showinfo(title="K Means Clustering",message="Error, enter a number between 1 and 300")
                     return False
                 # if self.path_ok and 0 < self.k <= 15 and isinstance(self.runs,int) and self.runs > 0: probably go back
-                if 10 <= self.runs <= 300:
+                if 1 <= self.runs <= 300:
                     if isinstance(self.k, int):
                         if self.preprocessingDone and self.k > 0 and self.k <= 15:
                             self.cluster_button["state"] = "active"
@@ -154,10 +154,10 @@ class GUI:
                 return True
             else:  # if input is not good
                 self.cluster_button["state"] = "disabled"
-                messagebox.showinfo(title="K Means Clustering",message="Error,enter a number between 10 and 300")
+                messagebox.showinfo(title="K Means Clustering",message="Error,enter a number between 1 and 300")
                 return False
         except ValueError:
-            messagebox.showinfo(title="K Means Clustering", message="Error,enter a number between 10 and 300")
+            messagebox.showinfo(title="K Means Clustering", message="Error,enter a number between 1 and 300")
 
     #process the file and clean it
     def preprocess(self):
