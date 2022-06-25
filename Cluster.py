@@ -46,6 +46,7 @@ class Cluster:
             newarr = dataframe.iloc[i, :].values
             vals.append(kmeans.predict(newarr.reshape(1, -1))[0])
         dataframe['algorithmOutput'] = vals
+        dataframe.to_excel("output.xlsx")
         #create figure 1:
         Y = dataframe['Generosity']
         X = dataframe['Social support']
