@@ -102,12 +102,13 @@ class GUI:
             if num_input.isdigit(): #if the user filled an integer
                 self.k = int(num_input)  # convert
                 if self.k <= 0 or self.k > 15:
-                    self.cluster_button["state"] = "disabled"
+                    if(self.k <= 0):
+                        self.cluster_button["state"] = "disabled"
                     messagebox.showinfo(title="K Means Clustering",message="Bad parameters,enter a number between 1 and 15")
                     return False
                 if 0 < self.k <= 15:
                     if isinstance(self.runs, int):
-                        if self.preprocessingDone and self.runs >= 10 and self.runs <= 300:
+                        if self.preprocessingDone and self.runs >= 1 and self.runs <= 300:
                             self.cluster_button["state"] = "active"
                         else:
                             self.cluster_button["state"] = "disabled"
@@ -121,7 +122,8 @@ class GUI:
                 self.cluster_button["state"] = "disabled"
                 return True
             else: #if input is not good
-                self.cluster_button["state"] = "disabled"
+                if self.has_numbers(num_input) == False:
+                    self.cluster_button["state"] = "disabled"
                 messagebox.showinfo(title="K Means Clustering", message="Bad parameters,enter a number between 1 and 15")
                 return False
         except ValueError:
@@ -133,11 +135,11 @@ class GUI:
             if num_input.isdigit():  # if the user filled an integer
                 self.runs = int(num_input)  # convert
                 if self.runs <= 0 or self.runs > 300:
-                    self.cluster_button["state"] = "disabled"
-                    messagebox.showinfo(title="K Means Clustering",message="Error, enter a number between 10 and 300")
+                    if (self.runs <= 0):
+                        self.cluster_button["state"] = "disabled"
+                    messagebox.showinfo(title="K Means Clustering",message="Error, enter a number between 1 and 300")
                     return False
-                # if self.path_ok and 0 < self.k <= 15 and isinstance(self.runs,int) and self.runs > 0: probably go back
-                if 10 <= self.runs <= 300:
+                if 1 <= self.runs <= 300:
                     if isinstance(self.k, int):
                         if self.preprocessingDone and self.k > 0 and self.k <= 15:
                             self.cluster_button["state"] = "active"
@@ -153,11 +155,12 @@ class GUI:
                 self.cluster_button["state"] = "disabled"
                 return True
             else:  # if input is not good
-                self.cluster_button["state"] = "disabled"
-                messagebox.showinfo(title="K Means Clustering",message="Error,enter a number between 10 and 300")
+                if self.has_numbers(num_input) == False:
+                    self.cluster_button["state"] = "disabled"
+                messagebox.showinfo(title="K Means Clustering",message="Error,enter a number between 1 and 300")
                 return False
         except ValueError:
-            messagebox.showinfo(title="K Means Clustering", message="Error,enter a number between 10 and 300")
+            messagebox.showinfo(title="K Means Clustering", message="Error,enter a number between 1 and 300")
 
     #process the file and clean it
     def preprocess(self):
@@ -166,8 +169,10 @@ class GUI:
             #print(self.currentDataframe)
             tk.messagebox.showinfo(title="K Means Clustering", message="Preprocessing completed successfully!")
             self.preprocessingDone=True
+            print(isinstance(self.runs, int))
+            print(isinstance(self.k, int))
             if isinstance(self.runs, int) and isinstance(self.k, int):
-                if self.preprocessingDone and self.runs >= 10 and self.runs <= 300 and self.k > 0 and self.k <= 15:
+                if self.preprocessingDone and self.runs >= 1 and self.runs <= 300 and self.k > 0 and self.k <= 15:
                     self.cluster_button["state"] = "active"
         except Exception as e:
             tk.messagebox.showinfo(title="K Means Clustering", message="Preprocessing couldn't complete")
@@ -186,6 +191,9 @@ class GUI:
             #self.master_window.destroy()
         except ValueError:
             tk.messagebox.showinfo(title="K Means Clustering", message="Bad parameters. Please try again")
+
+    def has_numbers(self,inputString):
+        return any(char.isdigit() for char in inputString)
 
 
 root = tk.Tk()
