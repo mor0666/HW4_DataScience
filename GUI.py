@@ -166,11 +166,8 @@ class GUI:
     def preprocess(self):
         try:
             self.currentDataframe = self.Clustermodel.preprocess(self.file_Path)  # Call the pre-process method
-            #print(self.currentDataframe)
             tk.messagebox.showinfo(title="K Means Clustering", message="Preprocessing completed successfully!")
             self.preprocessingDone=True
-            print(isinstance(self.runs, int))
-            print(isinstance(self.k, int))
             if isinstance(self.runs, int) and isinstance(self.k, int):
                 if self.preprocessingDone and self.runs >= 1 and self.runs <= 300 and self.k > 0 and self.k <= 15:
                     self.cluster_button["state"] = "active"
