@@ -12,9 +12,17 @@ from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 import chart_studio.plotly as py
 import plotly.graph_objects as go
+import pycountry
 
+def get_country_code(name):
+    for co in list(pycountry.countries):
+        if name in co.name:
+            return co.alpha_3
+    return None
 
 class Cluster:
+
+
 
     def preprocess(self, file_path):
         #reading the file
@@ -65,30 +73,39 @@ class Cluster:
         plt.close()
 
         #make the countries be a columns insted of the index
-        #dataframe_temp = dataframe.reset_index(level=0)
+        dataframe_temp = dataframe.reset_index(level=0)
+
+        #create the country codes using the module pycountry
+        countrycodes = []
+        for i in range(len(dataframe_temp)):
+            element = dataframe_temp.iloc[i]['country']
+            if get_country_code(element) != None:
+                countrycodes.append(get_country_code(element))
+            else:
+                countrycodes.append("NaN")
 
         #histograma - we need the 3 letter code for the countries to use it:
-        # py.sign_in("lidor12","NblOUQlm9HPqrNKAgPUw")
-        # fig = go.Figure(data=go.Choropleth(
-        #     locations=dataframe_temp['country'],
-        #     z=dataframe_temp['algorithmOutput'],
-        #     text=dataframe_temp['country'],
-        #     colorscale='Blues',
-        #     autocolorscale=False,
-        #     reversescale=True,
-        #     marker_line_color='darkgray',
-        #     marker_line_width=0.5,
-        #     colorbar_title='Clusters',
-        # ))
-        # fig.update_layout(
-        #     title_text='World countries and the clusters they belong',
-        #     geo=dict(
-        #         showframe=False,
-        #         showcoastlines=False,
-        #         projection_type='equirectangular'
-        #     )
-        # )
-        # py.image.save_as(fig,filename='map.png')
+        py.sign_in("lidor12","NblOUQlm9HPqrNKAgPUw")
+        fig = go.Figure(data=go.Choropleth(
+            locations=countrycodes,
+            z=dataframe_temp['algorithmOutput'],
+            text=dataframe_temp['country'],
+            colorscale='Blues',
+            autocolorscale=False,
+            reversescale=True,
+            marker_line_color='darkgray',
+            marker_line_width=0.5,
+            colorbar_title='Clusters',
+        ))
+        fig.update_layout(
+            title_text='World countries and the clusters they belong',
+            geo=dict(
+                showframe=False,
+                showcoastlines=False,
+                projection_type='equirectangular'
+            )
+        )
+        py.image.save_as(fig,filename='map.png')
         return
 
 

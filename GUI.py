@@ -99,12 +99,14 @@ class GUI:
     # Checks if number of clusters k is valid
     def IsKValid(self, num_input): #n_clusters
         try:
+            save = self.k
             if num_input.isdigit(): #if the user filled an integer
                 self.k = int(num_input)  # convert
                 if self.k <= 0 or self.k > 15:
                     if(self.k <= 0):
                         self.cluster_button["state"] = "disabled"
                     messagebox.showinfo(title="K Means Clustering",message="Bad parameters,enter a number between 1 and 15")
+                    self.k = save
                     return False
                 if 0 < self.k <= 15:
                     if isinstance(self.runs, int):
@@ -125,6 +127,7 @@ class GUI:
                 if self.has_numbers(num_input) == False:
                     self.cluster_button["state"] = "disabled"
                 messagebox.showinfo(title="K Means Clustering", message="Bad parameters,enter a number between 1 and 15")
+                self.k = save
                 return False
         except ValueError:
             messagebox.showinfo(title="K Means Clustering", message="Bad parameters,enter a number between 1 and 15")
@@ -132,12 +135,14 @@ class GUI:
     # Checks if number of runs is valid
     def IsRunsValid(self, num_input): #n_init
         try:
+            save = self.runs
             if num_input.isdigit():  # if the user filled an integer
                 self.runs = int(num_input)  # convert
                 if self.runs <= 0 or self.runs > 300:
                     if (self.runs <= 0):
                         self.cluster_button["state"] = "disabled"
                     messagebox.showinfo(title="K Means Clustering",message="Error, enter a number between 1 and 300")
+                    self.runs = save
                     return False
                 if 1 <= self.runs <= 300:
                     if isinstance(self.k, int):
@@ -158,6 +163,7 @@ class GUI:
                 if self.has_numbers(num_input) == False:
                     self.cluster_button["state"] = "disabled"
                 messagebox.showinfo(title="K Means Clustering",message="Error,enter a number between 1 and 300")
+                self.runs = save
                 return False
         except ValueError:
             messagebox.showinfo(title="K Means Clustering", message="Error,enter a number between 1 and 300")
@@ -179,13 +185,13 @@ class GUI:
         try:
             self.Clustermodel.cluster(self.currentDataframe, self.k, self.runs)  # Call the cluster method
             self.img1 = PhotoImage(file='plot1.png')
+            self.img2 = PhotoImage(file='map.png')
             self.fig1 = tk.Label(self.master_window,image=self.img1)
             self.fig1.grid(row=6, column=3,sticky='wens')
-            self.fig2 = tk.Label(self.master_window, image=self.img1)
+            self.fig2 = tk.Label(self.master_window, image=self.img2)
             self.fig2.grid(row=6, column=1, sticky='wens')
             self.IsClustered = True
             tk.messagebox.showinfo(title="K Means Clustering", message="K-means model and clusters visualization done")
-            #self.master_window.destroy()
         except ValueError:
             tk.messagebox.showinfo(title="K Means Clustering", message="Bad parameters. Please try again")
 
